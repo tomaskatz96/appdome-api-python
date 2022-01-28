@@ -1,8 +1,8 @@
 import argparse
 import logging
 
-from utils import (cleaned_fd_list, add_provisioning_profiles_entitlements, run_task_action,
-                   add_google_play_signing_fingerprint, ANDROID_SIGNING_FINGERPRINT_KEY, validate_response, add_common_args, init_logging)
+from utils import (cleaned_fd_list, add_provisioning_profiles_entitlements, run_task_action, add_google_play_signing_fingerprint,
+                   ANDROID_SIGNING_FINGERPRINT_KEY, validate_response, add_common_args, init_common_args)
 
 PRIVATE_SIGN_ACTION = 'seal'
 
@@ -27,7 +27,7 @@ def private_sign_ios(api_key, team_id, task_id, provisioning_profiles_paths):
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Initialize private signing on Appdome')
-    add_common_args(parser, True)
+    add_common_args(parser, add_task_id=True)
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-pr', '--provisioning_profiles', nargs='+', help='Path to iOS provisioning profiles to use. Can be multiple profiles')
     group.add_argument('-cf', '--signing_fingerprint', help='SHA-1 or SHA-256 final Android signing certificate fingerprint.')
@@ -37,7 +37,7 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    init_logging(args.verbose)
+    init_common_args(args)
 
     if args.signing_fingerprint:
         r = private_sign_android(args.api_key, args.team_id, args.task_id, args.signing_fingerprint, args.google_play_signing)

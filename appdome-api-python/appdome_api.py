@@ -16,7 +16,7 @@ from private_sign import private_sign_android, private_sign_ios
 from sign import sign_android, sign_ios
 from status import wait_for_status_complete
 from upload import upload
-from utils import init_logging, validate_response, log_and_exit, add_common_args
+from utils import validate_response, log_and_exit, add_common_args, init_common_args
 
 
 class Platform(Enum):
@@ -64,6 +64,7 @@ def parse_arguments():
 def validate_args(args):
     fusion_set_id = args.fusion_set_id
     platform = Platform.UNKNOWN
+    init_common_args(args)
     if args.app_path:
         app_path_ext = splitext(args.app_path)[-1].lower()
         if app_path_ext == ".ipa":
@@ -166,7 +167,6 @@ def _download_file(api_key, team_id, task_id, output_path, download_func):
 
 def main():
     args = parse_arguments()
-    init_logging(args.verbose)
     platform, fusion_set_id = validate_args(args)
 
     app_id = _upload(args.api_key, args.team_id, args.app_path, args.direct_upload) if args.app_path else args.app_id

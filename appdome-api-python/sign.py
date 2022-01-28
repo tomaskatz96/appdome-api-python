@@ -2,7 +2,7 @@ import argparse
 import logging
 
 from utils import (add_provisioning_profiles_entitlements, add_google_play_signing_fingerprint,
-                   run_task_action, cleaned_fd_list, validate_response, add_common_args, init_logging)
+                   run_task_action, cleaned_fd_list, validate_response, add_common_args, init_common_args)
 
 SIGN_ACTION = 'sign'
 
@@ -36,7 +36,7 @@ def sign_ios(api_key, team_id, task_id,
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Initialize signing on Appdome')
-    add_common_args(parser, True)
+    add_common_args(parser, add_task_id=True)
     parser.add_argument('-k', '--keystore', required=True, help='Path to keystore to use on Appdome iOS and Android signing.')
     parser.add_argument('-kp', '--keystore_pass', required=True, help='Password for keystore to use on Appdome iOS and Android signing..')
 
@@ -52,7 +52,7 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    init_logging(args.verbose)
+    init_common_args(args)
 
     if args.keystore_alias:
         r = sign_android(args.api_key, args.team_id, args.task_id, args.keystore, args.keystore_pass,

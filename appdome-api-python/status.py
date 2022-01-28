@@ -1,11 +1,12 @@
 import argparse
 import logging
-from time import sleep
 from os.path import join
+from time import sleep
 
 import requests
 
-from utils import url_with_team, TASKS_URL, request_headers, JSON_CONTENT_TYPE, validate_response, log_and_exit, add_common_args, init_logging
+from utils import (url_with_team, TASKS_URL, request_headers, JSON_CONTENT_TYPE, validate_response,
+                   log_and_exit, add_common_args, init_common_args)
 
 
 def status(api_key, team_id, task_id):
@@ -42,13 +43,13 @@ def wait_for_status_complete(api_key, team_id, task_id, timeout_sec=3600):
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Wait for status of task to be done')
-    add_common_args(parser, True)
+    add_common_args(parser, add_task_id=True)
     return parser.parse_args()
 
 
 def main():
     args = parse_arguments()
-    init_logging(args.verbose)
+    init_common_args(args)
     wait_for_status_complete(args.api_key, args.team_id, args.task_id)
     logging.info("Task complete")
 

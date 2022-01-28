@@ -1,12 +1,12 @@
 import argparse
 import logging
-from time import sleep
 from os.path import join
+from time import sleep
 
 import requests
 
-from utils import (SERVER_API_V1_URL, request_headers, JSON_CONTENT_TYPE, validate_response, add_common_args, init_logging,
-                   debug_log_request, log_and_exit)
+from utils import (SERVER_API_V1_URL, request_headers, JSON_CONTENT_TYPE, validate_response, add_common_args,
+                   debug_log_request, log_and_exit, init_common_args)
 
 VALIDATION = 'validation'
 
@@ -70,7 +70,7 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    init_logging(args.verbose)
+    init_common_args(args)
 
     r = validate_app(args.api_key, args.validate_app)
     validate_response(r)

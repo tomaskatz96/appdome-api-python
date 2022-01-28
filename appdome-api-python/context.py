@@ -1,7 +1,7 @@
 import argparse
 import logging
 
-from utils import run_task_action, cleaned_fd_list, validate_response, add_common_args, init_logging
+from utils import run_task_action, cleaned_fd_list, validate_response, add_common_args, init_common_args
 
 
 def context(api_key, team_id, task_id, new_bundle_id=None, new_version=None,
@@ -34,7 +34,7 @@ def context(api_key, team_id, task_id, new_bundle_id=None, new_version=None,
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Initialize Context on Appdome')
-    add_common_args(parser, True)
+    add_common_args(parser, add_task_id=True)
     parser.add_argument('--new_bundle_id', help="Change App identifier")
     parser.add_argument('--new_version', help="Change App version")
     parser.add_argument('--new_build_num', help="Change App build number")
@@ -46,7 +46,7 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    init_logging(args.verbose)
+    init_common_args(args)
 
     r = context(args.api_key, args.team_id, args.task_id, args.new_bundle_id, args.new_version, args.new_build_num,
                 args.new_display_name, args.app_icon_path, args.icon_overlay_path)

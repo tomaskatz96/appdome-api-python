@@ -5,7 +5,7 @@ from os.path import join, basename
 import requests
 
 from utils import (url_with_team, SERVER_API_V1_URL, request_headers, empty_files,
-                   validate_response, debug_log_request, add_common_args, init_logging, log_and_exit)
+                   validate_response, debug_log_request, add_common_args, log_and_exit, init_common_args)
 
 
 def get_upload_link(api_key, team_id):
@@ -54,7 +54,7 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    init_logging(args.verbose)
+    init_common_args(args)
     r = upload(args.api_key, args.team_id, args.app_path)
     validate_response(r)
     logging.info(f"Upload success: App id: {r.json()['id']}")

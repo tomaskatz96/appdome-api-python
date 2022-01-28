@@ -5,7 +5,7 @@ import logging
 import requests
 
 from utils import (request_headers, url_with_team, empty_files, validate_response, debug_log_request,
-                   TASKS_URL, ACTION_KEY, OVERRIDES_KEY, add_common_args, init_logging)
+                   TASKS_URL, ACTION_KEY, OVERRIDES_KEY, add_common_args, init_common_args)
 
 
 def build(api_key, team_id, app_id, fusion_set_id, overrides=None):
@@ -31,7 +31,7 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    init_logging(args.verbose)
+    init_common_args(args)
 
     overrides = {}
     if args.build_overrides:

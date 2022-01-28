@@ -5,7 +5,7 @@ from os.path import join
 import requests
 
 from utils import (url_with_team, SERVER_API_V1_URL, request_headers, validate_response,
-                   debug_log_request, init_logging, add_common_args)
+                   debug_log_request, add_common_args, init_common_args)
 
 
 def direct_upload(api_key, team_id, file_path):
@@ -26,7 +26,7 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    init_logging(args.verbose)
+    init_common_args(args)
     r = direct_upload(args.api_key, args.team_id, args.app_path)
     validate_response(r)
     logging.info(f"Direct upload success: App id: {r.json()['id']}")
