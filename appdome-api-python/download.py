@@ -18,7 +18,7 @@ def download(api_key, team_id, task_id):
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Download final output from Appdome')
     add_common_args(parser, add_task_id=True)
-    parser.add_argument('-o', '--output', required=True, help="Output of fused and signed file after Appdome")
+    parser.add_argument('-o', '--output', required=True, metavar='output_app_path', help="Output of fused and signed file after Appdome")
     return parser.parse_args()
 
 

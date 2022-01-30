@@ -18,7 +18,7 @@ def download_certified_secure(api_key, team_id, task_id):
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Download Certified Secure pdf file')
     add_common_args(parser, add_task_id=True)
-    parser.add_argument('-co', '--certificate_output', required=True, help="Output of Certified Secure pdf")
+    parser.add_argument('-co', '--certificate_output', required=True, metavar='certificate_output_path', help="Output of Certified Secure pdf")
     return parser.parse_args()
 
 

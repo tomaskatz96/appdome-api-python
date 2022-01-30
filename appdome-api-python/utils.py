@@ -11,6 +11,7 @@ SERVER_BASE_URL = getenv('APPDOME_SERVER_BASE_URL', 'https://fusion.appdome.com'
 SERVER_API_V1_URL = join(SERVER_BASE_URL, 'api/v1')
 
 API_KEY_ENV = 'APPDOME_API_KEY'
+TEAM_ID_ENV = 'APPDOME_TEAM_ID'
 TASKS_URL = join(SERVER_API_V1_URL, 'tasks')
 OVERRIDES_KEY = 'overrides'
 ACTION_KEY = 'action'
@@ -103,12 +104,12 @@ def debug_log_request(url, headers=None, data=None, files=None, request_type='po
 
 
 def add_common_args(parser, add_task_id=False, add_team_id=True):
-    parser.add_argument('-key', '--api_key', default=getenv(API_KEY_ENV), help=f"Appdome API key. Default is environment variable '{API_KEY_ENV}'")
+    parser.add_argument('-key', '--api_key', default=getenv(API_KEY_ENV), metavar=API_KEY_ENV, help=f"Appdome API key. Default is environment variable '{API_KEY_ENV}'")
     if add_team_id:
-        parser.add_argument('-t', '--team_id', default=getenv('APPDOME_TEAM_ID'), help="Appdome team id. Default is environment variable 'APPDOME_TEAM_ID'")
+        parser.add_argument('-t', '--team_id', default=getenv(TEAM_ID_ENV), metavar=TEAM_ID_ENV, help=f"Appdome team id. Default is environment variable '{TEAM_ID_ENV}'")
     parser.add_argument('-v', '--verbose', action='store_true', help="Show debug logs")
     if add_task_id:
-        parser.add_argument('--task_id', required=True, help="Build id on Appdome")
+        parser.add_argument('--task_id', required=True, metavar='task_id_value', help="Build id on Appdome")
 
 
 def init_common_args(args):

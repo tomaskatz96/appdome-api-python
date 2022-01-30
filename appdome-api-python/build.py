@@ -22,9 +22,9 @@ def build(api_key, team_id, app_id, fusion_set_id, overrides=None):
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Initialize Build app on Appdome')
     add_common_args(parser)
-    parser.add_argument('--app_id', required=True, help="App id on Appdome")
-    parser.add_argument('-fs', '--fusion_set_id', required=True, help="Appdome Fusion Set id.")
-    parser.add_argument('-bv', '--build_overrides', help="Path to json file with build overrides")
+    parser.add_argument('--app_id', required=True, metavar='app_id_value', help="App id on Appdome")
+    parser.add_argument('-fs', '--fusion_set_id', required=True, metavar='fusion_set_id_value', help="Appdome Fusion Set id.")
+    parser.add_argument('-bv', '--build_overrides', metavar='overrides_json_path', help="Path to json file with build overrides")
     parser.add_argument('-bl', '--diagnostic_logs', action='store_true', help="Build the app with Appdome's Diagnostic Logs (if licensed)")
     return parser.parse_args()
 

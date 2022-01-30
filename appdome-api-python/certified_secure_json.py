@@ -18,7 +18,7 @@ def download_certified_secure_json(api_key, team_id, task_id):
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Download Certified Secure json file')
     add_common_args(parser, add_task_id=True)
-    parser.add_argument('-cj', '--certificate_json', required=True, help="Output of Certified Secure json")
+    parser.add_argument('-cj', '--certificate_json', required=True, metavar='certificate_json_output_path', help="Output of Certified Secure json")
     return parser.parse_args()
 
 

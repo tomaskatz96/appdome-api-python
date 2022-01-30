@@ -37,16 +37,16 @@ def sign_ios(api_key, team_id, task_id,
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Initialize signing on Appdome')
     add_common_args(parser, add_task_id=True)
-    parser.add_argument('-k', '--keystore', required=True, help='Path to keystore to use on Appdome iOS and Android signing.')
-    parser.add_argument('-kp', '--keystore_pass', required=True, help='Password for keystore to use on Appdome iOS and Android signing..')
+    parser.add_argument('-k', '--keystore', required=True, metavar='keystore_path', help='Path to keystore to use on Appdome iOS and Android signing.')
+    parser.add_argument('-kp', '--keystore_pass', required=True, metavar='keystore_password', help='Password for keystore to use on Appdome iOS and Android signing..')
 
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-pr', '--provisioning_profiles', nargs='+', help='Path to iOS provisioning profiles to use. Can be multiple profiles')
-    group.add_argument('-ka', '--keystore_alias', help='Key alias to use on Appdome Android signing.')
-    parser.add_argument('-kyp', '--key_pass', help='Password for the key to use on Appdome Android signing.')
-    parser.add_argument('--google_play_signing_fingerprint', help='SHA-1 or SHA-256 Google Play App Signing certificate fingerprint.')
+    group.add_argument('-pr', '--provisioning_profiles', nargs='+', metavar='provisioning_profile_path', help='Path to iOS provisioning profiles to use. Can be multiple profiles')
+    group.add_argument('-ka', '--keystore_alias', metavar='key_alias', help='Key alias to use on Appdome Android signing.')
+    parser.add_argument('-kyp', '--key_pass', metavar='key_password', help='Password for the key to use on Appdome Android signing.')
+    parser.add_argument('--google_play_signing_fingerprint', metavar='signing_fingerprint', help='SHA-1 or SHA-256 Google Play App Signing certificate fingerprint.')
     parser.add_argument('-gp', '--google_play_signing', action='store_true', help='This Android application will be distributed via the Google Play App Signing program.')
-    parser.add_argument('-entt', '--entitlements', nargs='+', help='Path to iOS entitlements to use. Can be multiple entitlements files')
+    parser.add_argument('-entt', '--entitlements', nargs='+', metavar='entitlements_plist_path', help='Path to iOS entitlements plist to use. Can be multiple entitlements files')
     return parser.parse_args()
 
 

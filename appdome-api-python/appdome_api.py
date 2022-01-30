@@ -28,16 +28,17 @@ class Platform(Enum):
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Runs Appdome API commands')
     upload_group = parser.add_mutually_exclusive_group(required=True)
-    upload_group.add_argument('-a', '--app_path', help="Upload app in path")
-    upload_group.add_argument('--app_id', help="App id of previously uploaded app")
+    upload_group.add_argument('-a', '--app_path', metavar='application_path', help="Upload app input path")
+    upload_group.add_argument('--app_id', metavar='app_id_value', help="App id of previously uploaded app")
 
     add_common_args(parser)
 
     parser.add_argument('--direct_upload', action='store_true', help="Upload app directly to Appdome, and not through aws pre-signed url")
-    parser.add_argument('-fs', '--fusion_set_id', help="Appdome Fusion Set id. "
-                                                       "Default for Android is environment variable APPDOME_ANDROID_FS_ID. "
-                                                       "Default for iOS is environment variable APPDOME_IOS_FS_ID")
-    parser.add_argument('-bv', '--build_overrides', help="Path to json file with build overrides")
+    parser.add_argument('-fs', '--fusion_set_id', metavar='fusion_set_id_value',
+                        help="Appdome Fusion Set id. "
+                             "Default for Android is environment variable APPDOME_ANDROID_FS_ID. "
+                             "Default for iOS is environment variable APPDOME_IOS_FS_ID")
+    parser.add_argument('-bv', '--build_overrides', metavar='overrides_json_path', help="Path to json file with build overrides")
 
     sign_group = parser.add_mutually_exclusive_group(required=True)
     sign_group.add_argument('-s', '--sign_on_appdome', action='store_true', help="Sign on Appdome")
@@ -45,19 +46,19 @@ def parse_arguments():
     sign_group.add_argument('-adps', '--auto_dev_private_signing', action='store_true', help="Use a pre-generated signing script for automated local signing")
 
     # Signing credentials
-    parser.add_argument('-k', '--keystore', help='Path to keystore to use on Appdome iOS and Android signing.')
-    parser.add_argument('-kp', '--keystore_pass', help='Password for keystore to use on Appdome iOS and Android signing..')
-    parser.add_argument('-ka', '--keystore_alias', help='Key alias to use on Appdome Android signing.')
-    parser.add_argument('-kyp', '--key_pass', help='Password for the key to use on Appdome Android signing.')
-    parser.add_argument('-cf', '--signing_fingerprint', help='SHA-1 or SHA-256 final Android signing certificate fingerprint.')
+    parser.add_argument('-k', '--keystore', metavar='keystore_path', help='Path to keystore to use on Appdome iOS and Android signing.')
+    parser.add_argument('-kp', '--keystore_pass', metavar='keystore_password', help='Password for keystore to use on Appdome iOS and Android signing..')
+    parser.add_argument('-ka', '--keystore_alias', metavar='key_alias', help='Key alias to use on Appdome Android signing.')
+    parser.add_argument('-kyp', '--key_pass', metavar='key_password', help='Password for the key to use on Appdome Android signing.')
+    parser.add_argument('-cf', '--signing_fingerprint', metavar='signing_fingerprint', help='SHA-1 or SHA-256 final Android signing certificate fingerprint.')
     parser.add_argument('-gp', '--google_play_signing', action='store_true', help='This Android application will be distributed via the Google Play App Signing program.')
-    parser.add_argument('-pr', '--provisioning_profiles', nargs='+', help='Path to iOS provisioning profiles to use. Can be multiple profiles')
-    parser.add_argument('-entt', '--entitlements', nargs='+', help='Path to iOS entitlements to use. Can be multiple entitlements files')
+    parser.add_argument('-pr', '--provisioning_profiles', nargs='+', metavar='provisioning_profile_path', help='Path to iOS provisioning profiles to use. Can be multiple profiles')
+    parser.add_argument('-entt', '--entitlements', nargs='+', metavar='entitlements_plist_path', help='Path to iOS entitlements plist to use. Can be multiple entitlements files')
 
     # Output parameters
-    parser.add_argument('-o', '--output', help="Output of fused and signed file after Appdome")
-    parser.add_argument('-co', '--certificate_output', help="Output of Certified Secure pdf")
-    parser.add_argument('-cj', '--certificate_json', help="Output of Certified Secure json")
+    parser.add_argument('-o', '--output', metavar='output_app_path', help="Output of fused and signed file after Appdome")
+    parser.add_argument('-co', '--certificate_output', metavar='certificate_output_path', help="Output of Certified Secure pdf")
+    parser.add_argument('-cj', '--certificate_json', metavar='certificate_json_output_path', help="Output of Certified Secure json")
     return parser.parse_args()
 
 

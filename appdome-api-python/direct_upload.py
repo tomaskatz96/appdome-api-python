@@ -20,7 +20,7 @@ def direct_upload(api_key, team_id, file_path):
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Upload app to directly to Appdome')
     add_common_args(parser)
-    parser.add_argument('-a', '--app_path', required=True, help="Upload app in path")
+    parser.add_argument('-a', '--app_path', required=True, metavar='application_path', help="Upload app input path")
     return parser.parse_args()
 
 
