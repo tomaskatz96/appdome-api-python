@@ -14,12 +14,12 @@ The following environment variables can be defined in order to save passing them
 * APPDOME_ANDROID_FS_ID
 
 
-Android Example (assuming the above environment variables are set):
+### Android Example (assuming the above environment variables are set):
 
-python3 appdome_api.py --app_path <path to apk/aab file> --sign_on_appdome --keystore <path to keystore file> --keystore_pass <keystore password>
- --keystore_alias <key alias> --key_pass <key password> --output <path to output apk/aab> --certificate_output <path to output certificate pdf>
+python3 appdome_api.py --app_path `<path to apk/aab file>` --sign_on_appdome --keystore `<path to keystore file>` --keystore_pass `<keystore password>`
+ --keystore_alias `<key alias>` --key_pass `<key password>` --output `<path to output apk/aab>` --certificate_output `<path to output certificate pdf>`
  
-iOS Example (assuming the above environment variables are set):
+### iOS Example (assuming the above environment variables are set):
 
-python3 appdome_api.py --app_path <path to ipa file> --sign_on_appdome --keystore ~/Desktop/files/APPDOME_DISTRIBUTION_DEV.p12 --keystore_pass nf1101 
---provisioning_profiles <provisioning profile path> <another provisioning profile path if needed> --output <path to output ipa> --certificate_output <path to output certificate pdf>
+python3 appdome_api.py --app_path `<path to ipa file>` --sign_on_appdome --keystore `<path to p12 file>` --keystore_pass `<p12 password>` 
+--provisioning_profiles `<provisioning profile path>` `<another provisioning profile path if needed>` --output `<path to output ipa>` --certificate_output `<path to output certificate pdf>`
