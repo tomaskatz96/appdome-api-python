@@ -2,8 +2,8 @@
 import json
 import logging
 from contextlib import contextmanager
-from os import getenv
-from os.path import join
+from os import getenv, makedirs
+from os.path import join, isdir, dirname, exists
 
 import requests
 
@@ -81,8 +81,18 @@ def run_task_action(api_key, team_id, action, task_id, overrides, files):
 
 def validate_response(response):
     if response.status_code != 200:
-        log_and_exit(f'Validation status for request {response.request.url} with headers {response.request.headers} and body {response.request.body} failed.'
+        headers_to_print = {}
+        for key, value in response.request.headers.items():
+            headers_to_print[key] = value_to_print(value)
+        body_to_print = value_to_print(response.request.body)
+
+        log_and_exit(f'Validation status for request {response.request.url} with headers {headers_to_print} and body {body_to_print} failed.'
                      f' Status Code: {response.status_code}. Response: {response.text}')
+
+
+def value_to_print(value):
+    max_str_len = 500
+    return value if len(str(value)) < max_str_len else str(value)[:max_str_len] + " ... '"
 
 
 def log_and_exit(log_line):
@@ -107,12 +117,23 @@ def add_common_args(parser, add_task_id=False, add_team_id=True):
     parser.add_argument('-key', '--api_key', default=getenv(API_KEY_ENV), metavar=API_KEY_ENV, help=f"Appdome API key. Default is environment variable '{API_KEY_ENV}'")
     if add_team_id:
         parser.add_argument('-t', '--team_id', default=getenv(TEAM_ID_ENV), metavar=TEAM_ID_ENV, help=f"Appdome team id. Default is environment variable '{TEAM_ID_ENV}'")
-    parser.add_argument('-v', '--verbose', action='store_true', help="Show debug logs")
+    parser.add_argument('-v', '--verbose', action='store_true', help='Show debug logs')
     if add_task_id:
-        parser.add_argument('--task_id', required=True, metavar='task_id_value', help="Build id on Appdome")
+        parser.add_argument('--task_id', required=True, metavar='task_id_value', help='Build id on Appdome')
 
 
 def init_common_args(args):
     if not args.api_key:
         log_and_exit(f"api_key must be specified or set though the '{API_KEY_ENV}' environment variable")
     init_logging(args.verbose)
+
+
+def validate_output_path(path):
+    if not path:
+        return
+    if isdir(path):
+        log_and_exit(f"Output parameter [{path}] should be a path to a file, not a directory")
+    path_dir = dirname(path)
+    if not exists(path_dir):
+        logging.info(f"Creating non-existent output directory [{path_dir}]")
+        makedirs(path_dir)

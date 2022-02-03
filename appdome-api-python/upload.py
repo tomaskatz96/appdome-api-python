@@ -48,14 +48,14 @@ def upload(api_key, team_id, file_path):
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Upload app to Appdome')
     add_common_args(parser)
-    parser.add_argument('-a', '--app_path', required=True, metavar='application_path', help="Upload app input path")
+    parser.add_argument('-a', '--app', required=True, metavar='application_file', help='Upload app file input path')
     return parser.parse_args()
 
 
 def main():
     args = parse_arguments()
     init_common_args(args)
-    r = upload(args.api_key, args.team_id, args.app_path)
+    r = upload(args.api_key, args.team_id, args.app)
     validate_response(r)
     logging.info(f"Upload success: App id: {r.json()['id']}")
 

@@ -29,7 +29,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Initialize private signing on Appdome')
     add_common_args(parser, add_task_id=True)
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-pr', '--provisioning_profiles', nargs='+', metavar='provisioning_profile_path', help='Path to iOS provisioning profiles to use. Can be multiple profiles')
+    group.add_argument('-pr', '--provisioning_profiles', nargs='+', metavar='provisioning_profile_file', help='Path to iOS provisioning profiles files to use. Can be multiple profiles')
     group.add_argument('-cf', '--signing_fingerprint', metavar='signing_fingerprint', help='SHA-1 or SHA-256 final Android signing certificate fingerprint.')
     parser.add_argument('-gp', '--google_play_signing', action='store_true', help='This Android application will be distributed via the Google Play App Signing program.')
     return parser.parse_args()

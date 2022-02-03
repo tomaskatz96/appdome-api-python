@@ -10,13 +10,12 @@ from build import build
 from certified_secure import download_certified_secure
 from certified_secure_json import download_certified_secure_json
 from context import context
-from direct_upload import direct_upload
 from download import download
 from private_sign import private_sign_android, private_sign_ios
 from sign import sign_android, sign_ios
 from status import wait_for_status_complete
 from upload import upload
-from utils import validate_response, log_and_exit, add_common_args, init_common_args
+from utils import validate_response, log_and_exit, add_common_args, init_common_args, validate_output_path
 
 
 class Platform(Enum):
@@ -28,37 +27,36 @@ class Platform(Enum):
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Runs Appdome API commands')
     upload_group = parser.add_mutually_exclusive_group(required=True)
-    upload_group.add_argument('-a', '--app_path', metavar='application_path', help="Upload app input path")
-    upload_group.add_argument('--app_id', metavar='app_id_value', help="App id of previously uploaded app")
+    upload_group.add_argument('-a', '--app', metavar='application_file', help='Upload app file input path')
+    upload_group.add_argument('--app_id', metavar='app_id_value', help='App id of previously uploaded app')
 
     add_common_args(parser)
 
-    parser.add_argument('--direct_upload', action='store_true', help="Upload app directly to Appdome, and not through aws pre-signed url")
     parser.add_argument('-fs', '--fusion_set_id', metavar='fusion_set_id_value',
-                        help="Appdome Fusion Set id. "
-                             "Default for Android is environment variable APPDOME_ANDROID_FS_ID. "
-                             "Default for iOS is environment variable APPDOME_IOS_FS_ID")
-    parser.add_argument('-bv', '--build_overrides', metavar='overrides_json_path', help="Path to json file with build overrides")
+                        help='Appdome Fusion Set id. '
+                             'Default for Android is environment variable APPDOME_ANDROID_FS_ID. '
+                             'Default for iOS is environment variable APPDOME_IOS_FS_ID')
+    parser.add_argument('-bv', '--build_overrides', metavar='overrides_json_file', help='Path to json file with build overrides')
 
     sign_group = parser.add_mutually_exclusive_group(required=True)
-    sign_group.add_argument('-s', '--sign_on_appdome', action='store_true', help="Sign on Appdome")
-    sign_group.add_argument('-ps', '--private_signing', action='store_true', help="Sign application manually")
-    sign_group.add_argument('-adps', '--auto_dev_private_signing', action='store_true', help="Use a pre-generated signing script for automated local signing")
+    sign_group.add_argument('-s', '--sign_on_appdome', action='store_true', help='Sign on Appdome')
+    sign_group.add_argument('-ps', '--private_signing', action='store_true', help='Sign application manually')
+    sign_group.add_argument('-adps', '--auto_dev_private_signing', action='store_true', help='Use a pre-generated signing script for automated local signing')
 
     # Signing credentials
-    parser.add_argument('-k', '--keystore', metavar='keystore_path', help='Path to keystore to use on Appdome iOS and Android signing.')
+    parser.add_argument('-k', '--keystore', metavar='keystore_file', help='Path to keystore file to use on Appdome iOS and Android signing.')
     parser.add_argument('-kp', '--keystore_pass', metavar='keystore_password', help='Password for keystore to use on Appdome iOS and Android signing..')
     parser.add_argument('-ka', '--keystore_alias', metavar='key_alias', help='Key alias to use on Appdome Android signing.')
     parser.add_argument('-kyp', '--key_pass', metavar='key_password', help='Password for the key to use on Appdome Android signing.')
     parser.add_argument('-cf', '--signing_fingerprint', metavar='signing_fingerprint', help='SHA-1 or SHA-256 final Android signing certificate fingerprint.')
     parser.add_argument('-gp', '--google_play_signing', action='store_true', help='This Android application will be distributed via the Google Play App Signing program.')
-    parser.add_argument('-pr', '--provisioning_profiles', nargs='+', metavar='provisioning_profile_path', help='Path to iOS provisioning profiles to use. Can be multiple profiles')
+    parser.add_argument('-pr', '--provisioning_profiles', nargs='+', metavar='provisioning_profile_file', help='Path to iOS provisioning profiles files to use. Can be multiple profiles')
     parser.add_argument('-entt', '--entitlements', nargs='+', metavar='entitlements_plist_path', help='Path to iOS entitlements plist to use. Can be multiple entitlements files')
 
     # Output parameters
-    parser.add_argument('-o', '--output', metavar='output_app_path', help="Output of fused and signed file after Appdome")
-    parser.add_argument('-co', '--certificate_output', metavar='certificate_output_path', help="Output of Certified Secure pdf")
-    parser.add_argument('-cj', '--certificate_json', metavar='certificate_json_output_path', help="Output of Certified Secure json")
+    parser.add_argument('-o', '--output', metavar='output_app_file', help='Output file for fused and signed app after Appdome')
+    parser.add_argument('-co', '--certificate_output', metavar='certificate_output_file', help='Output file for Certified Secure pdf')
+    parser.add_argument('-cj', '--certificate_json', metavar='certificate_json_output_file', help='Output file for Certified Secure json')
     return parser.parse_args()
 
 
@@ -66,8 +64,8 @@ def validate_args(args):
     fusion_set_id = args.fusion_set_id
     platform = Platform.UNKNOWN
     init_common_args(args)
-    if args.app_path:
-        app_path_ext = splitext(args.app_path)[-1].lower()
+    if args.app:
+        app_path_ext = splitext(args.app)[-1].lower()
         if app_path_ext == ".ipa":
             platform = Platform.IOS
         elif app_path_ext == ".apk" or app_path_ext == ".aab":
@@ -84,7 +82,7 @@ def validate_args(args):
             log_and_exit(f"Please specify the correct platform signing credentials")
 
     if not fusion_set_id:
-        fusion_set_id = getenv('APPDOME_IOS_FS_ID' if platform == Platform.IOS else "APPDOME_ANDROID_FS_ID")
+        fusion_set_id = getenv('APPDOME_IOS_FS_ID' if platform == Platform.IOS else 'APPDOME_ANDROID_FS_ID')
         if not fusion_set_id:
             log_and_exit(f"fusion_set_id must be specified or set though the correct platform environment variable")
 
@@ -101,14 +99,14 @@ def validate_args(args):
         if platform == Platform.ANDROID and (not args.keystore_alias or not args.key_pass):
             log_and_exit(f"keystore_alias and key_pass must be specified when using on Appdome Android signing")
 
+    validate_output_path(args.output)
+    validate_output_path(args.certificate_output)
+    validate_output_path(args.certificate_json)
     return platform, fusion_set_id
 
 
-def _upload(api_key, team_id, app_path, direct_upload_param):
-    if direct_upload_param:
-        upload_response = direct_upload(api_key, team_id, app_path)
-    else:
-        upload_response = upload(api_key, team_id, app_path)
+def _upload(api_key, team_id, app_path):
+    upload_response = upload(api_key, team_id, app_path)
     validate_response(upload_response)
     logging.info(f"Upload done. Response: {upload_response.json()}")
     return upload_response.json()['id']
@@ -170,7 +168,7 @@ def main():
     args = parse_arguments()
     platform, fusion_set_id = validate_args(args)
 
-    app_id = _upload(args.api_key, args.team_id, args.app_path, args.direct_upload) if args.app_path else args.app_id
+    app_id = _upload(args.api_key, args.team_id, args.app) if args.app else args.app_id
 
     task_id = _build(args.api_key, args.team_id, app_id, fusion_set_id, args.build_overrides)
 

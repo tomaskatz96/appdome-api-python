@@ -37,11 +37,11 @@ def sign_ios(api_key, team_id, task_id,
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Initialize signing on Appdome')
     add_common_args(parser, add_task_id=True)
-    parser.add_argument('-k', '--keystore', required=True, metavar='keystore_path', help='Path to keystore to use on Appdome iOS and Android signing.')
+    parser.add_argument('-k', '--keystore', required=True, metavar='keystore_file', help='Path to keystore file to use on Appdome iOS and Android signing.')
     parser.add_argument('-kp', '--keystore_pass', required=True, metavar='keystore_password', help='Password for keystore to use on Appdome iOS and Android signing..')
 
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-pr', '--provisioning_profiles', nargs='+', metavar='provisioning_profile_path', help='Path to iOS provisioning profiles to use. Can be multiple profiles')
+    group.add_argument('-pr', '--provisioning_profiles', nargs='+', metavar='provisioning_profile_file', help='Path to iOS provisioning profiles files to use. Can be multiple profiles')
     group.add_argument('-ka', '--keystore_alias', metavar='key_alias', help='Key alias to use on Appdome Android signing.')
     parser.add_argument('-kyp', '--key_pass', metavar='key_password', help='Password for the key to use on Appdome Android signing.')
     parser.add_argument('--google_play_signing_fingerprint', metavar='signing_fingerprint', help='SHA-1 or SHA-256 Google Play App Signing certificate fingerprint.')

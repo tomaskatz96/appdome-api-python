@@ -64,7 +64,7 @@ def validate_app(api_key, file_path):
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Validate App after local signing')
     add_common_args(parser, add_team_id=False)
-    parser.add_argument('-vl', '--validate_app', required=True, help="Path of app to validate")
+    parser.add_argument('-vl', '--validate_app', required=True, help='Path of app to validate')
     return parser.parse_args()
 
 
