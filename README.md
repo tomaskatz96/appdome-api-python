@@ -16,10 +16,10 @@ The following environment variables can be defined in order to save passing them
 
 ### Android Example (assuming the above environment variables are set):
 
-python3 appdome_api.py --app `<path to apk/aab file>` --sign_on_appdome --keystore `<path to keystore file>` --keystore_pass `<keystore password>`
- --keystore_alias `<key alias>` --key_pass `<key password>` --output `<path to output apk/aab>` --certificate_output `<path to output certificate pdf>`
+python3 appdome_api.py --app `<apk/aab file>` --sign_on_appdome --keystore `<keystore file>` --keystore_pass `<keystore password>`
+ --keystore_alias `<key alias>` --key_pass `<key password>` --output `<output apk/aab>` --certificate_output `<output certificate pdf>`
 
 ### iOS Example (assuming the above environment variables are set):
 
-python3 appdome_api.py --app `<path to ipa file>` --sign_on_appdome --keystore `<path to p12 file>` --keystore_pass `<p12 password>`
---provisioning_profiles `<provisioning profile path>` `<another provisioning profile path if needed>` --output `<path to output ipa>` --certificate_output `<path to output certificate pdf>`
+python3 appdome_api.py --app `<ipa file>` --sign_on_appdome --keystore `<p12 file>` --keystore_pass `<p12 password>`
+--provisioning_profiles `<provisioning profile file>` `<another provisioning profile file if needed>` --output `<output ipa>` --certificate_output `<output certificate pdf>`
