@@ -68,6 +68,13 @@ def add_provisioning_profiles_entitlements(provisioning_profiles_paths, entitlem
             open_fd.append(f)
             files_list.append(('entitlements_files', (entitlements_path, f)))
 
+def init_overrides(overrides_file):
+    overrides = {}
+    if overrides_file:
+        with open(overrides_file, 'rb') as f:
+            overrides = json.load(f)
+    return overrides
+
 
 def run_task_action(api_key, team_id, action, task_id, overrides, files):
     if not files:

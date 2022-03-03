@@ -5,7 +5,7 @@ import logging
 import requests
 
 from utils import (request_headers, url_with_team, empty_files, validate_response, debug_log_request,
-                   TASKS_URL, ACTION_KEY, OVERRIDES_KEY, add_common_args, init_common_args)
+                   TASKS_URL, ACTION_KEY, OVERRIDES_KEY, add_common_args, init_common_args, init_overrides)
 
 
 def build(api_key, team_id, app_id, fusion_set_id, overrides=None):
@@ -33,10 +33,7 @@ def main():
     args = parse_arguments()
     init_common_args(args)
 
-    overrides = {}
-    if args.build_overrides:
-        with open(args.build_overrides, 'rb') as f:
-            overrides = json.load(f)
+    overrides = init_overrides(args.build_overrides)
 
     if args.diagnostic_logs:
         overrides['extended_logs'] = True

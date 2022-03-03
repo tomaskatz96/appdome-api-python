@@ -1,21 +1,26 @@
 import argparse
 import logging
+import json
 
 from utils import (add_provisioning_profiles_entitlements, add_google_play_signing_fingerprint,
-                   run_task_action, cleaned_fd_list, validate_response, add_common_args, init_common_args)
+                   run_task_action, cleaned_fd_list, validate_response, add_common_args, init_common_args, init_overrides)
 
 SIGN_ACTION = 'sign'
 
 
 def sign_android(api_key, team_id, task_id,
                  keystore_path, keystore_pass, key_alias, key_pass,
-                 google_play_signing_fingerprint=None):
+                 google_play_signing_fingerprint=None, sign_overrides=None):
     overrides = {
         'signing_keystore_password':  keystore_pass,
         'signing_keystore_alias': key_alias,
         'signing_keystore_key_password': key_pass
     }
+    
     add_google_play_signing_fingerprint(google_play_signing_fingerprint, overrides)
+
+    if sign_overrides:
+        overrides.update(sign_overrides)
 
     with open(keystore_path, 'rb') as f:
         files = {'signing_keystore': (keystore_path, f)}
@@ -23,14 +28,16 @@ def sign_android(api_key, team_id, task_id,
 
 
 def sign_ios(api_key, team_id, task_id,
-             keystore_p12_path, keystore_pass, provisioning_profiles_paths, entitlements_paths=None):
+             keystore_p12_path, keystore_pass, provisioning_profiles_paths, entitlements_paths=None, sign_overrides=None):
     overrides = {'signing_p12_password':  keystore_pass}
+
     with cleaned_fd_list() as open_fd:
         f = open(keystore_p12_path, 'rb')
         open_fd.append(f)
         files_list = [('signing_p12_content', (keystore_p12_path, f))]
         add_provisioning_profiles_entitlements(provisioning_profiles_paths, entitlements_paths, files_list, overrides, open_fd)
-
+        if sign_overrides:
+            overrides.update(sign_overrides)
         return run_task_action(api_key, team_id, SIGN_ACTION, task_id, overrides, files_list)
 
 
@@ -39,6 +46,7 @@ def parse_arguments():
     add_common_args(parser, add_task_id=True)
     parser.add_argument('-k', '--keystore', required=True, metavar='keystore_file', help='Path to keystore file to use on Appdome iOS and Android signing.')
     parser.add_argument('-kp', '--keystore_pass', required=True, metavar='keystore_password', help='Password for keystore to use on Appdome iOS and Android signing..')
+    parser.add_argument('-sv', '--sign_overrides', metavar='overrides_json_file', help='Path to json file with sign overrides')
 
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-pr', '--provisioning_profiles', nargs='+', metavar='provisioning_profile_file', help='Path to iOS provisioning profiles files to use. Can be multiple profiles')
@@ -54,12 +62,14 @@ def main():
     args = parse_arguments()
     init_common_args(args)
 
+    overrides = init_overrides(args.sign_overrides)
+
     if args.keystore_alias:
         r = sign_android(args.api_key, args.team_id, args.task_id, args.keystore, args.keystore_pass,
-                         args.keystore_alias, args.key_pass, args.google_play_signing_fingerprint)
+                         args.keystore_alias, args.key_pass, args.google_play_signing_fingerprint, overrides)
     else:
         r = sign_ios(args.api_key, args.team_id, args.task_id, args.keystore, args.keystore_pass,
-                     args.provisioning_profiles, args.entitlements)
+                     args.provisioning_profiles, args.entitlements, overrides)
 
     validate_response(r)
     logging.info(f"On Appdome signing for Build id: {r.json()['task_id']} started")

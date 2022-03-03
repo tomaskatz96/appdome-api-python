@@ -15,7 +15,7 @@ from private_sign import private_sign_android, private_sign_ios
 from sign import sign_android, sign_ios
 from status import wait_for_status_complete
 from upload import upload
-from utils import validate_response, log_and_exit, add_common_args, init_common_args, validate_output_path
+from utils import validate_response, log_and_exit, add_common_args, init_common_args, validate_output_path, init_overrides
 
 
 class Platform(Enum):
@@ -37,6 +37,7 @@ def parse_arguments():
                              'Default for Android is environment variable APPDOME_ANDROID_FS_ID. '
                              'Default for iOS is environment variable APPDOME_IOS_FS_ID')
     parser.add_argument('-bv', '--build_overrides', metavar='overrides_json_file', help='Path to json file with build overrides')
+    parser.add_argument('-sv', '--sign_overrides', metavar='overrides_json_file', help='Path to json file with sign overrides')
 
     sign_group = parser.add_mutually_exclusive_group(required=True)
     sign_group.add_argument('-s', '--sign_on_appdome', action='store_true', help='Sign on Appdome')
@@ -113,10 +114,7 @@ def _upload(api_key, team_id, app_path):
 
 
 def _build(api_key, team_id, app_id, fusion_set_id, build_overrides):
-    build_overrides_json = None
-    if build_overrides:
-        with open(build_overrides, 'rb') as f:
-            build_overrides_json = json.load(f)
+    build_overrides_json = init_overrides(build_overrides)
     build_response = build(api_key, team_id, app_id, fusion_set_id, build_overrides_json)
     validate_response(build_response)
     logging.info(f"Build request started. Response: {build_response.json()}")
@@ -132,23 +130,24 @@ def _context(api_key, team_id, task_id):
     wait_for_status_complete(api_key, team_id, task_id)
 
 
-def _sign(args, platform, task_id):
+def _sign(args, platform, task_id, sign_overrides):
+    sign_overrides_json = init_overrides(sign_overrides)
     if platform == Platform.ANDROID:
         if args.sign_on_appdome:
             r = sign_android(args.api_key, args.team_id, task_id, args.keystore, args.keystore_pass,
-                             args.keystore_alias, args.key_pass, args.signing_fingerprint if args.google_play_signing else None)
+                             args.keystore_alias, args.key_pass, args.signing_fingerprint if args.google_play_signing else None, sign_overrides_json)
         elif args.private_signing:
-            r = private_sign_android(args.api_key, args.team_id, task_id, args.signing_fingerprint, args.google_play_signing)
+            r = private_sign_android(args.api_key, args.team_id, task_id, args.signing_fingerprint, args.google_play_signing, sign_overrides_json)
         else:
-            r = auto_dev_sign_android(args.api_key, args.team_id, task_id, args.signing_fingerprint, args.google_play_signing)
+            r = auto_dev_sign_android(args.api_key, args.team_id, task_id, args.signing_fingerprint, args.google_play_signing, sign_overrides_json)
     else:
         if args.sign_on_appdome:
             r = sign_ios(args.api_key, args.team_id, task_id, args.keystore, args.keystore_pass,
-                         args.provisioning_profiles, args.entitlements)
+                         args.provisioning_profiles, args.entitlements, sign_overrides_json)
         elif args.private_signing:
-            r = private_sign_ios(args.api_key, args.team_id, task_id, args.provisioning_profiles)
+            r = private_sign_ios(args.api_key, args.team_id, task_id, args.provisioning_profiles, sign_overrides_json)
         else:
-            r = auto_dev_sign_ios(args.api_key, args.team_id, task_id, args.provisioning_profiles, args.entitlements)
+            r = auto_dev_sign_ios(args.api_key, args.team_id, task_id, args.provisioning_profiles, args.entitlements, sign_overrides_json)
 
     validate_response(r)
     logging.info(f"Signing request started. Response: {r.json()}")
@@ -174,7 +173,7 @@ def main():
 
     _context(args.api_key, args.team_id, task_id)
 
-    _sign(args, platform, task_id)
+    _sign(args, platform, task_id, args.sign_overrides)
 
     if args.output:
         _download_file(args.api_key, args.team_id, task_id, args.output, download)
