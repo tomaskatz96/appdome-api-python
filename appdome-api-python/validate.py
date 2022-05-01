@@ -1,18 +1,17 @@
 import argparse
 import logging
-from os.path import join
 from time import sleep
 
 import requests
 
 from utils import (SERVER_API_V1_URL, request_headers, JSON_CONTENT_TYPE, validate_response, add_common_args,
-                   debug_log_request, log_and_exit, init_common_args)
+                   debug_log_request, log_and_exit, init_common_args, build_url)
 
 VALIDATION = 'validation'
 
 
 def validation_upload(api_key, file_path):
-    url = join(SERVER_API_V1_URL, VALIDATION, 'upload')
+    url = build_url(SERVER_API_V1_URL, VALIDATION, 'upload')
     headers = request_headers(api_key)
     with open(file_path, 'rb') as f:
         files = {'file': (file_path, f)}
@@ -21,7 +20,7 @@ def validation_upload(api_key, file_path):
 
 
 def validation_status(api_key, validation_id):
-    url = join(SERVER_API_V1_URL, VALIDATION, validation_id, 'status')
+    url = build_url(SERVER_API_V1_URL, VALIDATION, validation_id, 'status')
     headers = request_headers(api_key, JSON_CONTENT_TYPE)
     return requests.get(url, headers=headers)
 

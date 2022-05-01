@@ -1,16 +1,15 @@
 import argparse
 import logging
-from os.path import join
 from time import sleep
 
 import requests
 
 from utils import (url_with_team, TASKS_URL, request_headers, JSON_CONTENT_TYPE, validate_response,
-                   log_and_exit, add_common_args, init_common_args)
+                   log_and_exit, add_common_args, init_common_args, build_url)
 
 
 def status(api_key, team_id, task_id):
-    url = url_with_team(join(TASKS_URL, task_id, 'status'), team_id)
+    url = url_with_team(build_url(TASKS_URL, task_id, 'status'), team_id)
     headers = request_headers(api_key, JSON_CONTENT_TYPE)
     return requests.get(url, headers=headers)
 

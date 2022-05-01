@@ -1,15 +1,15 @@
 import argparse
 import logging
-from os.path import join, basename
+from os.path import basename
 
 import requests
 
-from utils import (url_with_team, SERVER_API_V1_URL, request_headers, empty_files,
-                   validate_response, debug_log_request, add_common_args, log_and_exit, init_common_args)
+from utils import (url_with_team, SERVER_API_V1_URL, request_headers, empty_files, validate_response, 
+        debug_log_request, add_common_args, log_and_exit, init_common_args, build_url)
 
 
 def get_upload_link(api_key, team_id):
-    url = url_with_team(join(SERVER_API_V1_URL, 'upload-link'), team_id)
+    url = url_with_team(build_url(SERVER_API_V1_URL, 'upload-link'), team_id)
     headers = request_headers(api_key)
     debug_log_request(url, headers, request_type='get')
     return requests.get(url, headers=headers)
@@ -22,7 +22,7 @@ def put_file_in_aws(file_path, aws_url):
 
 
 def upload_using_link(api_key, team_id, file_id, file_name):
-    url = url_with_team(join(SERVER_API_V1_URL, 'upload-using-link'), team_id)
+    url = url_with_team(build_url(SERVER_API_V1_URL, 'upload-using-link'), team_id)
     headers = request_headers(api_key)
     body = {'file_app_id': file_id, 'file_name': file_name}
     debug_log_request(url, data=body)

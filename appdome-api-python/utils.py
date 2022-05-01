@@ -3,22 +3,26 @@ import json
 import logging
 from contextlib import contextmanager
 from os import getenv, makedirs
-from os.path import join, isdir, dirname, exists
+from os.path import isdir, dirname, exists
+from urllib.parse import urljoin
 
 import requests
 
-SERVER_BASE_URL = getenv('APPDOME_SERVER_BASE_URL', 'https://fusion.appdome.com')
-SERVER_API_V1_URL = join(SERVER_BASE_URL, 'api/v1')
+def build_url(*args):
+    url = "/".join(args)
+    return url
+
+SERVER_BASE_URL = getenv('APPDOME_SERVER_BASE_URL', 'https://fusion.appdome.com/')
+SERVER_API_V1_URL = urljoin(SERVER_BASE_URL, 'api/v1')
 
 API_KEY_ENV = 'APPDOME_API_KEY'
 TEAM_ID_ENV = 'APPDOME_TEAM_ID'
-TASKS_URL = join(SERVER_API_V1_URL, 'tasks')
+TASKS_URL = build_url(SERVER_API_V1_URL, 'tasks')
 OVERRIDES_KEY = 'overrides'
 ACTION_KEY = 'action'
 ANDROID_SIGNING_FINGERPRINT_KEY = 'signing_sha1_fingerprint'
 
 JSON_CONTENT_TYPE = 'application/json'
-
 
 def url_with_team(url, team_id):
     return url + f"?team_id={team_id}" if team_id else url
