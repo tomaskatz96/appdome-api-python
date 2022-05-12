@@ -37,6 +37,7 @@ def parse_arguments():
                              'Default for Android is environment variable APPDOME_ANDROID_FS_ID. '
                              'Default for iOS is environment variable APPDOME_IOS_FS_ID')
     parser.add_argument('-bv', '--build_overrides', metavar='overrides_json_file', help='Path to json file with build overrides')
+    parser.add_argument('-bl', '--diagnostic_logs', action='store_true', help="Build the app with Appdome's Diagnostic Logs (if licensed)")
     parser.add_argument('-sv', '--sign_overrides', metavar='overrides_json_file', help='Path to json file with sign overrides')
 
     sign_group = parser.add_mutually_exclusive_group(required=True)
@@ -113,9 +114,9 @@ def _upload(api_key, team_id, app_path):
     return upload_response.json()['id']
 
 
-def _build(api_key, team_id, app_id, fusion_set_id, build_overrides):
+def _build(api_key, team_id, app_id, fusion_set_id, build_overrides, use_diagnostic_logs):
     build_overrides_json = init_overrides(build_overrides)
-    build_response = build(api_key, team_id, app_id, fusion_set_id, build_overrides_json)
+    build_response = build(api_key, team_id, app_id, fusion_set_id, build_overrides_json, use_diagnostic_logs)
     validate_response(build_response)
     logging.info(f"Build request started. Response: {build_response.json()}")
     task_id = build_response.json()['task_id']
@@ -169,7 +170,7 @@ def main():
 
     app_id = _upload(args.api_key, args.team_id, args.app) if args.app else args.app_id
 
-    task_id = _build(args.api_key, args.team_id, app_id, fusion_set_id, args.build_overrides)
+    task_id = _build(args.api_key, args.team_id, app_id, fusion_set_id, args.build_overrides, args.diagnostic_logs)
 
     _context(args.api_key, args.team_id, task_id)
 

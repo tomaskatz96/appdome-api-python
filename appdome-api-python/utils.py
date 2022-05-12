@@ -145,6 +145,6 @@ def validate_output_path(path):
     if isdir(path):
         log_and_exit(f"Output parameter [{path}] should be a path to a file, not a directory")
     path_dir = dirname(path)
-    if not exists(path_dir):
+    if path_dir and not exists(path_dir):
         logging.info(f"Creating non-existent output directory [{path_dir}]")
         makedirs(path_dir)

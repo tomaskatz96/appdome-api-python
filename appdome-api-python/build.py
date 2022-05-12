@@ -8,10 +8,15 @@ from utils import (request_headers, url_with_team, empty_files, validate_respons
                    TASKS_URL, ACTION_KEY, OVERRIDES_KEY, add_common_args, init_common_args, init_overrides)
 
 
-def build(api_key, team_id, app_id, fusion_set_id, overrides=None):
+def build(api_key, team_id, app_id, fusion_set_id, overrides=None, use_diagnostic_logs=False):
     headers = request_headers(api_key)
     url = url_with_team(TASKS_URL, team_id)
     body = {ACTION_KEY: 'fuse', 'app_id': app_id, 'fusion_set_id': fusion_set_id}
+
+    if use_diagnostic_logs:
+        if overrides is None:
+            overrides = {}
+        overrides['extended_logs'] = True
 
     if overrides:
         body[OVERRIDES_KEY] = json.dumps(overrides)
@@ -35,10 +40,7 @@ def main():
 
     overrides = init_overrides(args.build_overrides)
 
-    if args.diagnostic_logs:
-        overrides['extended_logs'] = True
-
-    r = build(args.api_key, args.team_id, args.app_id, args.fusion_set_id, overrides)
+    r = build(args.api_key, args.team_id, args.app_id, args.fusion_set_id, overrides, args.diagnostic_logs)
     validate_response(r)
     logging.info(f"Build started: Build id: {r.json()['task_id']}")
 
