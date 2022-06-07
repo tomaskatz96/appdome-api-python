@@ -8,24 +8,29 @@ from urllib.parse import urljoin
 
 import requests
 
+SERVER_BASE_URL = getenv('APPDOME_SERVER_BASE_URL', 'https://fusion.appdome.com/')
+SERVER_API_V1_URL = urljoin(SERVER_BASE_URL, 'api/v1')
+API_KEY_ENV = 'APPDOME_API_KEY'
+TEAM_ID_ENV = 'APPDOME_TEAM_ID'
+OVERRIDES_KEY = 'overrides'
+ACTION_KEY = 'action'
+ANDROID_SIGNING_FINGERPRINT_KEY = 'signing_sha1_fingerprint'
+JSON_CONTENT_TYPE = 'application/json'
+
+
 def build_url(*args):
     url = "/".join(args)
     return url
 
-SERVER_BASE_URL = getenv('APPDOME_SERVER_BASE_URL', 'https://fusion.appdome.com/')
-SERVER_API_V1_URL = urljoin(SERVER_BASE_URL, 'api/v1')
 
-API_KEY_ENV = 'APPDOME_API_KEY'
-TEAM_ID_ENV = 'APPDOME_TEAM_ID'
 TASKS_URL = build_url(SERVER_API_V1_URL, 'tasks')
-OVERRIDES_KEY = 'overrides'
-ACTION_KEY = 'action'
-ANDROID_SIGNING_FINGERPRINT_KEY = 'signing_sha1_fingerprint'
 
-JSON_CONTENT_TYPE = 'application/json'
 
-def url_with_team(url, team_id):
-    return url + f"?team_id={team_id}" if team_id else url
+def team_params(team_id):
+    params = {}
+    if team_id:
+        params['team_id'] = team_id
+    return params
 
 
 def request_headers(api_key, content_type=None):
@@ -72,6 +77,7 @@ def add_provisioning_profiles_entitlements(provisioning_profiles_paths, entitlem
             open_fd.append(f)
             files_list.append(('entitlements_files', (entitlements_path, f)))
 
+
 def init_overrides(overrides_file):
     overrides = {}
     if overrides_file:
@@ -84,10 +90,21 @@ def run_task_action(api_key, team_id, action, task_id, overrides, files):
     if not files:
         files = empty_files()
     headers = request_headers(api_key)
-    url = url_with_team(TASKS_URL, team_id)
+    url = TASKS_URL
+    params = team_params(team_id)
     body = {ACTION_KEY: action, 'parent_task_id': task_id, OVERRIDES_KEY: json.dumps(overrides)}
-    debug_log_request(url, headers=headers, data=body, files=files)
-    return requests.post(url, headers=headers, data=body, files=files)
+    debug_log_request(url, headers=headers, params=params, data=body, files=files)
+    return requests.post(url, headers=headers, params=params, data=body, files=files)
+
+
+def task_output_command(api_key, team_id, task_id, command, action=None):
+    url = build_url(TASKS_URL, task_id, command)
+    params = team_params(team_id)
+    if action:
+        params[ACTION_KEY] = action
+    headers = request_headers(api_key, JSON_CONTENT_TYPE)
+    debug_log_request(url, headers=headers,  params=params, request_type='get')
+    return requests.get(url, headers=headers, params=params)
 
 
 def validate_response(response):
@@ -117,11 +134,12 @@ def init_logging(verbose=False):
     init_logging.func_code = (lambda: None).__code__
 
 
-def debug_log_request(url, headers=None, data=None, files=None, request_type='post'):
+def debug_log_request(url, headers=None, data=None, params=None, files=None, request_type='post'):
+    params_line = f" with params: {params}." if params else ""
     headers_line = f" with headers: {headers}." if headers else ""
     data_line = f" with data: {data}." if data else ""
     files_line = f" with file: {files}." if files else ""
-    logging.debug(f"About to {request_type} {url}{headers_line}{data_line}{files_line}")
+    logging.debug(f"About to {request_type} {url}{params_line}{headers_line}{data_line}{files_line}")
 
 
 def add_common_args(parser, add_task_id=False, add_team_id=True):

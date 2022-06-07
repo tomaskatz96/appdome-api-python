@@ -4,13 +4,14 @@ import logging
 
 import requests
 
-from utils import (request_headers, url_with_team, empty_files, validate_response, debug_log_request,
-                   TASKS_URL, ACTION_KEY, OVERRIDES_KEY, add_common_args, init_common_args, init_overrides)
+from utils import (request_headers, empty_files, validate_response, debug_log_request, TASKS_URL,
+                   ACTION_KEY, OVERRIDES_KEY, add_common_args, init_common_args, init_overrides, team_params)
 
 
 def build(api_key, team_id, app_id, fusion_set_id, overrides=None, use_diagnostic_logs=False):
     headers = request_headers(api_key)
-    url = url_with_team(TASKS_URL, team_id)
+    url = TASKS_URL
+    params = team_params(team_id)
     body = {ACTION_KEY: 'fuse', 'app_id': app_id, 'fusion_set_id': fusion_set_id}
 
     if use_diagnostic_logs:
@@ -20,8 +21,8 @@ def build(api_key, team_id, app_id, fusion_set_id, overrides=None, use_diagnosti
 
     if overrides:
         body[OVERRIDES_KEY] = json.dumps(overrides)
-    debug_log_request(url, headers=headers, data=body)
-    return requests.post(url, headers=headers, data=body, files=empty_files())
+    debug_log_request(url, headers=headers, params=params, data=body)
+    return requests.post(url, headers=headers, params=params, data=body, files=empty_files())
 
 
 def parse_arguments():

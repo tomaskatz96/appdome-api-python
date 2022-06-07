@@ -1,17 +1,11 @@
 import argparse
 import logging
 
-import requests
-
-from utils import (url_with_team, TASKS_URL, request_headers, JSON_CONTENT_TYPE, validate_response,
-                   debug_log_request, add_common_args, init_common_args, validate_output_path, build_url)
+from utils import (validate_response, add_common_args, init_common_args, validate_output_path, task_output_command)
 
 
 def download_certified_secure_json(api_key, team_id, task_id):
-    url = url_with_team(build_url(TASKS_URL, task_id, 'certificate-json'), team_id)
-    headers = request_headers(api_key, JSON_CONTENT_TYPE)
-    debug_log_request(url, headers=headers, request_type='get')
-    return requests.get(url, headers=headers)
+    return task_output_command(api_key, team_id, task_id, 'certificate-json')
 
 
 def parse_arguments():

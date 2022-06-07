@@ -10,7 +10,7 @@ from build import build
 from certified_secure import download_certified_secure
 from certified_secure_json import download_certified_secure_json
 from context import context
-from download import download
+from download import download, download_action
 from private_sign import private_sign_android, private_sign_ios
 from sign import sign_android, sign_ios
 from status import wait_for_status_complete
@@ -57,6 +57,8 @@ def parse_arguments():
 
     # Output parameters
     parser.add_argument('-o', '--output', metavar='output_app_file', help='Output file for fused and signed app after Appdome')
+    parser.add_argument('--deobfuscation_script_output', metavar='deobfuscation_scripts_zip_file', help='Output file deobfuscation scripts when building with "Obfuscate App Logic"')
+    parser.add_argument('--sign_second_output', metavar='second_output_app_file', help='Output file for secondary output file - universal apk when building an aab app')
     parser.add_argument('-co', '--certificate_output', metavar='certificate_output_file', help='Output file for Certified Secure pdf')
     parser.add_argument('-cj', '--certificate_json', metavar='certificate_json_output_file', help='Output file for Certified Secure json')
     return parser.parse_args()
@@ -178,6 +180,8 @@ def main():
 
     if args.output:
         _download_file(args.api_key, args.team_id, task_id, args.output, download)
+    download_action(args.api_key, args.team_id, task_id, args.deobfuscation_script_output, 'deobfuscation_script')
+    download_action(args.api_key, args.team_id, task_id, args.sign_second_output, 'sign_second_output')
     if args.certificate_output:
         _download_file(args.api_key, args.team_id, task_id, args.certificate_output, download_certified_secure)
     if args.certificate_json:
