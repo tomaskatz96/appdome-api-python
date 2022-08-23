@@ -24,3 +24,6 @@ python3 appdome_api.py --app `<apk/aab file>` --sign_on_appdome --keystore `<key
 
 python3 appdome_api.py --app `<ipa file>` --sign_on_appdome --keystore `<p12 file>` --keystore_pass `<p12 password>`
 --provisioning_profiles `<provisioning profile file>` `<another provisioning profile file if needed>` --entitlements `<entitlements file>` `<another entitlements file if needed>` --output `<output ipa>` --certificate_output `<output certificate pdf>`
+
+### Integration Example With GitHub Actions:
+[GitHub Actions Example](github_actions_appdome_workfolw_example.yml) 
