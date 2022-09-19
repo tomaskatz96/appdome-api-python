@@ -76,6 +76,8 @@ def add_provisioning_profiles_entitlements(provisioning_profiles_paths, entitlem
             f = open(entitlements_path, 'rb')
             open_fd.append(f)
             files_list.append(('entitlements_files', (entitlements_path, f)))
+    else:
+        overrides['manual_entitlements_matching'] = False
 
 
 def init_overrides(overrides_file):
