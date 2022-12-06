@@ -1,6 +1,6 @@
-# Single action examples
+# Detailed Usage Examples
 
-**Note:** This document assumes that you have defined the following environment variables:.
+**Note:** This document assumes that you have defined the following environment variables:
 
 ```
 APPDOME_API_KEY
@@ -21,25 +21,30 @@ export APPDOME_ANDROID_FS_ID=<your_android_fusion_set_id>
 ## Android whole process
 
 ```
-python3 appdome_api.py --app <apk/aab file> 
---sign_on_appdome 
---keystore <keystore file> 
---keystore_pass <keystore password> 
---keystore_alias <key alias> 
---key_pass <key password> 
---output <output apk/aab> 
+python3 appdome_api.py --app <apk/aab file>
+--sign_on_appdome
+--keystore <keystore file>
+--keystore_pass <keystore password>
+--keystore_alias <key alias>
+--key_pass <key password>
+--output <output apk/aab>
 --certificate_output <output certificate pdf>
 ```
+
 ## iOS whole process
 
 ```
 python3 appdome_api.py --app <ipa file>
---sign_on_appdome --keystore <p12 file> 
---keystore_pass <p12 password> 
---provisioning_profiles <provisioning profile file> <another provisioning profile file if needed> 
---entitlements <entitlements file> <another entitlements file if needed> --output <output ipa> 
+--sign_on_appdome --keystore <p12 file>
+--keystore_pass <p12 password>
+--provisioning_profiles <provisioning profile file> <another provisioning profile file if needed>
+--entitlements <entitlements file> <another entitlements file if needed> --output <output ipa>
 --certificate_output <output certificate pdf>
 ```
+
+Private Signing and Auto-Dev Private Signing can also be invoked in the whole process commands
+using the params `--private_signing` or `--auto_dev_private_signing` instead of `--sign_on_appdome`
+and adjusting the required signing parameters.
 
 ___
 ## The next section details individual actions
@@ -61,9 +66,9 @@ python3 status.py --task_id <task_id_value>
 [Possible overrides](https://apis.appdome.com/reference/post_tasks-build)
 
 ```
-python3 build.py --app_id <app_id_value> 
+python3 build.py --app_id <app_id_value>
 --fusion_set_id <fusion_set_id_value>
---build_overrides <overrides_json_file> 
+--build_overrides <overrides_json_file>
 ```
 
 ## Context
@@ -79,7 +84,7 @@ python3 context.py --task_id <task_id_value>
 --icon_overlay <icon_overlay_file>
 ```
 
-## Sign
+## On Appdome Signing
 
 [Possible overrides](https://apis.appdome.com/reference/post_tasks-sign)
 
@@ -105,7 +110,7 @@ python3 sign.py --task_id <task_id_value>
 --entitlements <entitlements file> <another entitlements file if needed>
 ```
 
-## Private sign
+## Private Signing
 
 [Possible overrides](https://apis.appdome.com/reference/post_tasks-privatesign)
 
@@ -125,7 +130,7 @@ python3 private_sign.py --task_id <task_id_value>
 --provisioning_profiles <provisioning profile file> <another provisioning profile file if needed>
 ```
 
-## Auto-Dev sign
+## Auto-Dev Private Signing
 
 [Possible overrides](https://apis.appdome.com/reference/post_tasks-autodev)
 
