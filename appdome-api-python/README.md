@@ -12,10 +12,10 @@ APPDOME_ANDROID_FS_ID
 To define them, you can use the following command:
 
 ```
-export APPDOME_API_KEY=<your_api_key>
-export APPDOME_TEAM_ID=<your_team_id>
-export APPDOME_IOS_FS_ID=<your_ios_fusion_set_id>
-export APPDOME_ANDROID_FS_ID=<your_android_fusion_set_id>
+export APPDOME_API_KEY=<api key value>
+export APPDOME_TEAM_ID=<team id value>
+export APPDOME_IOS_FS_ID=<ios fusion set id value>
+export APPDOME_ANDROID_FS_ID=<android fusion set id value>
 ```
 
 ## Android whole process
@@ -59,29 +59,29 @@ python3 upload.py --app <apk/aab/ipa file>
 ## Status
 All of the actions from this point are asynchronous. You can check the status of the action with the following command:
 ```
-python3 status.py --task_id <task_id_value>
+python3 status.py --task_id <task id value>
 ```
 
 ## Build
 [Possible overrides](https://apis.appdome.com/reference/post_tasks-build)
 
 ```
-python3 build.py --app_id <app_id_value>
---fusion_set_id <fusion_set_id_value>
---build_overrides <overrides_json_file>
+python3 build.py --app_id <app id value>
+--fusion_set_id <fusion set id value>
+--build_overrides <overrides json file>
 ```
 
 ## Context
 [Possible overrides](https://apis.appdome.com/reference/post_tasks-context)
 
 ```
-python3 context.py --task_id <task_id_value>
---new_bundle_id <bundle_id_value>
---new_version <version_value>
---new_build_number <build_number_value>
---new_display_name <display_name_value>
---app_icon <app_icon_file>
---icon_overlay <icon_overlay_file>
+python3 context.py --task_id <task id value>
+--new_bundle_id <bundle id value>
+--new_version <version value>
+--new_build_number <build number value>
+--new_display_name <display name value>
+--app_icon <app icon file>
+--icon_overlay <icon overlay file>
 ```
 
 ## On Appdome Signing
@@ -91,21 +91,21 @@ python3 context.py --task_id <task_id_value>
 **Android**
 
 ```
-python3 sign.py --task_id <task_id_value>
+python3 sign.py --task_id <task id value>
 --keystore <keystore file>
 --keystore_pass <keystore password>
 --keystore_alias <key alias>
 --key_pass <key password>
---sign_overrides <overrides_json_file>
+--sign_overrides <overrides json file>
 ```
 
 **iOS**
 
 ```
-python3 sign.py --task_id <task_id_value>
+python3 sign.py --task_id <task id value>
 --keystore <p12 file>
 --keystore_pass <p12 password>
---sign_overrides <overrides_json_file>
+--sign_overrides <overrides json file>
 --provisioning_profiles <provisioning profile file> <another provisioning profile file if needed>
 --entitlements <entitlements file> <another entitlements file if needed>
 ```
@@ -116,17 +116,17 @@ python3 sign.py --task_id <task_id_value>
 
 **Android**
 ```
-python3 private_sign.py --task_id <task_id_value>
---signing_fingerprint <signing_fingerprint>
---sign_overrides <overrides_json_file>
+python3 private_sign.py --task_id <task id value>
+--signing_fingerprint <signing fingerprint>
+--sign_overrides <overrides json file>
 --google_play_signing
 ```
 
 **iOS**
 
 ```
-python3 private_sign.py --task_id <task_id_value>
---sign_overrides <overrides_json_file>
+python3 private_sign.py --task_id <task id value>
+--sign_overrides <overrides json file>
 --provisioning_profiles <provisioning profile file> <another provisioning profile file if needed>
 ```
 
@@ -137,16 +137,16 @@ python3 private_sign.py --task_id <task_id_value>
 **Android**
 
 ```
-python3 auto_dev_sign.py --task_id <task_id_value>
---signing_fingerprint <signing_fingerprint>
+python3 auto_dev_sign.py --task_id <task id value>
+--signing_fingerprint <signing fingerprint>
 --google_play_signing
 ```
 
 **iOS**
 
 ```
-python3 auto_dev_sign.py --task_id <task_id_value>
---sign_overrides <overrides_json_file>
+python3 auto_dev_sign.py --task_id <task id value>
+--sign_overrides <overrides json file>
 --provisioning_profiles <provisioning profile file> <another provisioning profile file if needed>
 --entitlements <entitlements file> <another entitlements file if needed>
 ```
@@ -154,23 +154,23 @@ python3 auto_dev_sign.py --task_id <task_id_value>
 ## Download
 
 ```
-python3 download.py --task_id <task_id_value>
+python3 download.py --task_id <task id value>
 --output <output file>
---deobfuscation_script_output <deobfuscation_scripts_zip_file>
---sign_second_output <second_output_app_file>
+--deobfuscation_script_output <deobfuscation scripts zip file>
+--sign_second_output <second output app file>
 ```
 
 ## Download Certified Secure pdf file
 
 ```
-python3 certified_secure.py --task_id <task_id_value>
+python3 certified_secure.py --task_id <task id value>
 --certificate_output <output certificate pdf>
 ```
 
 ## Download Certified Secure json file
 ```
-python3 certified_secure_json.py --task_id <task_id_value>
---certificate_json <certificate_json_output_file>
+python3 certified_secure_json.py --task_id <task id value>
+--certificate_json <certificate json output file>
 ```
 
 ## Validate App after local signing
