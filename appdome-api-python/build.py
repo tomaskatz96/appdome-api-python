@@ -8,7 +8,7 @@ from utils import (request_headers, empty_files, validate_response, debug_log_re
                    ACTION_KEY, OVERRIDES_KEY, add_common_args, init_common_args, init_overrides, team_params)
 
 
-def build(api_key, team_id, app_id, fusion_set_id, overrides=None, use_diagnostic_logs=False):
+def create_build_request(api_key, team_id, app_id, fusion_set_id, overrides=None, use_diagnostic_logs=False):
     headers = request_headers(api_key)
     url = TASKS_URL
     params = team_params(team_id)
@@ -21,6 +21,12 @@ def build(api_key, team_id, app_id, fusion_set_id, overrides=None, use_diagnosti
 
     if overrides:
         body[OVERRIDES_KEY] = json.dumps(overrides)
+    
+    return url, headers, body, params
+
+
+def build(api_key, team_id, app_id, fusion_set_id, overrides=None, use_diagnostic_logs=False):
+    url, headers, body, params = create_build_request(api_key, team_id, app_id, fusion_set_id, overrides, use_diagnostic_logs)
     debug_log_request(url, headers=headers, params=params, data=body)
     return requests.post(url, headers=headers, params=params, data=body, files=empty_files())
 
