@@ -1,6 +1,5 @@
 import argparse
 import logging
-import json
 
 from utils import (cleaned_fd_list, add_provisioning_profiles_entitlements, run_task_action, add_google_play_signing_fingerprint,
                    ANDROID_SIGNING_FINGERPRINT_KEY, validate_response, add_common_args, init_common_args, init_overrides)
