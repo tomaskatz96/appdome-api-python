@@ -44,7 +44,9 @@ def upload(api_key, team_id, file_path):
     logging.info(f"Uploading file id {file_id} to url: {aws_url}")
     aws_put_response = put_file_in_aws(file_path, aws_url)
     validate_response(aws_put_response)
-    return upload_using_link(api_key, team_id, file_id, basename(file_path))
+    app = upload_using_link(api_key, team_id, file_id, basename(file_path))
+    validate_response(app)
+    return app
 
 
 def parse_arguments():
