@@ -71,7 +71,8 @@ def add_provisioning_profiles_entitlements(provisioning_profiles_paths, entitlem
         open_fd.append(f)
         files_list.append(('provisioning_profile', (prov_profile_path, f)))
     if entitlements_paths:
-        overrides['manual_entitlements_matching'] = True
+        if overrides:
+            overrides['manual_entitlements_matching'] = True
         for entitlements_path in entitlements_paths:
             f = open(entitlements_path, 'rb')
             open_fd.append(f)
@@ -110,7 +111,8 @@ def task_output_command(api_key, team_id, task_id, command, action=None):
 
 
 def validate_response(response):
-    if response.status_code != 200:
+    accepted_response_codes = [200, 204]
+    if response.status_code not in accepted_response_codes:
         headers_to_print = {}
         for key, value in response.request.headers.items():
             headers_to_print[key] = value_to_print(value)
