@@ -7,7 +7,7 @@ from os.path import splitext
 from auto_dev_sign import auto_dev_sign_android, auto_dev_sign_ios
 from build import build
 from certified_secure import download_certified_secure
-from certified_secure_json import download_certified_secure_json
+from certified_secure_json import download_certified_secure_json, format_json_file
 from context import context
 from download import download, download_action
 from private_sign import private_sign_android, private_sign_ios
@@ -185,6 +185,7 @@ def main():
         _download_file(args.api_key, args.team_id, task_id, args.certificate_output, download_certified_secure)
     if args.certificate_json:
         _download_file(args.api_key, args.team_id, task_id, args.certificate_json, download_certified_secure_json)
+        format_json_file(args.certificate_json)
 
 
 if __name__ == '__main__':
