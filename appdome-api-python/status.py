@@ -15,21 +15,28 @@ def status(api_key, team_id, task_id):
     return requests.get(url, headers=headers, params=params)
 
 
-def wait_for_status_complete(api_key, team_id, task_id, timeout_sec=3600):
-    sleep_time = 10
+def wait_for_status_complete(api_key, team_id, task_id, interval_sec=10, timeout_sec=3600, num_of_retries=3):
     accumulated_sleep = 0
     status_value = 'not initialized'
     status_response_json = ''
     while accumulated_sleep <= timeout_sec:
-        status_response = status(api_key, team_id, task_id)
+        status_response = None
+        for i in range(num_of_retries):
+            try:
+                status_response = status(api_key, team_id, task_id)
+            except Exception as e:
+                if i == num_of_retries - 1:
+                    raise Exception('Wait for status Error. Error: {}'.format(e))
+                logging.debug('Wait for status Error. Error: {}'.format(e))
+                sleep(interval_sec)
         validate_response(status_response)
         status_response_json = status_response.json()
         status_value = status_response_json.get('status', '')
         if status_value == 'progress':
-            logging.debug(f'Task not complete. Response: {status_response_json}. Sleeping for {sleep_time} seconds')
+            logging.debug(f'Task not complete. Response: {status_response_json}. Sleeping for {interval_sec} seconds')
             print('.', end='', flush=True)
-            sleep(sleep_time)
-            accumulated_sleep += sleep_time
+            sleep(interval_sec)
+            accumulated_sleep += interval_sec
         else:
             print('', flush=True)
             break
