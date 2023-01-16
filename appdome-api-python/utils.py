@@ -16,6 +16,7 @@ OVERRIDES_KEY = 'overrides'
 ACTION_KEY = 'action'
 ANDROID_SIGNING_FINGERPRINT_KEY = 'signing_sha1_fingerprint'
 JSON_CONTENT_TYPE = 'application/json'
+APPDOME_CLIENT_HEADER = getenv('APPDOME_CLIENT_HEADER', 'Appdome-cli/1.0')
 
 
 def build_url(*args):
@@ -39,6 +40,7 @@ def request_headers(api_key, content_type=None):
         'Cache-Control': 'no-cache',
         'Accept-Encoding': 'gzip, deflate, br',
         'Connection': 'keep-alive',
+        'X-Appdome-Client': APPDOME_CLIENT_HEADER
     }
     if content_type:
         headers['Content-Type'] = content_type
