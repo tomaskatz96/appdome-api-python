@@ -25,4 +25,4 @@ python3 appdome_api.py --api_key `<api key>` --fusion_set_id `<fusion set id>` -
 python3 appdome_api.py --api_key `<api key>` --fusion_set_id `<fusion set id>` --team_id `<team id>` --app `<ipa file>` --sign_on_appdome --keystore `<p12 file>` --keystore_pass `<p12 password>` --provisioning_profiles `<provisioning profile file>` `<another provisioning profile file if needed>` --entitlements `<entitlements file>` `<another entitlements file if needed>` --output `<output ipa>` --certificate_output `<output certificate pdf>`
 
 ### Integration Example With GitHub Actions:
-[GitHub Actions Example](github_actions_appdome_workfolw_example.yml)
+[GitHub Actions Example](github_actions_appdome_workflow_example.yml)
