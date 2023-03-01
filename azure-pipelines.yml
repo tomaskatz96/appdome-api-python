@@ -28,4 +28,7 @@ steps:
     echo "Worked"
     echo $(THOMAS)
   displayName: 'Install dependencies'
-
+  
+- task: buildandreleasetask@0
+  inputs:
+    samplestring: 'Thomas'
