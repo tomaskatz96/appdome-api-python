@@ -38,16 +38,8 @@ steps:
     # sudo ln -s -t /etc/ssl/certs/ $(textFile.secureFilePath)
     cat $(textFile.secureFilePath)
 
-- task: PowerShell@2
-  inputs:
-    filePath: 'script.ps1'
-    arguments: '-SecureFilePath $(SecureFilePath.secureFilePath)'
-  env:
-    SecureFilePath: $(SecureFilePath.secureFilePath)
-  displayName: 'Run script with secure file'
-  secureFileId: '237443e9-9820-4928-a606-677330e2c56b'
 
-# - task: buildandreleasetask@0
-#   inputs:
-#     samplestring: 'just some input'
-#     fileInput: "/home/vsts/work/_temp/txt.txt"
+- task: buildandreleasetask@0
+  inputs:
+    samplestring: 'just some input'
+    fileInput: "237443e9-9820-4928-a606-677330e2c56b"
