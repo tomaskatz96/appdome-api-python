@@ -38,9 +38,10 @@ steps:
     # sudo ln -s -t /etc/ssl/certs/ $(textFile.secureFilePath)
     cat $(textFile.secureFilePath)
     echo "blah"
+    echo $(Pipeline.Workspace)
 
 
-- task: buildandreleasetask@0
-  inputs:
-    samplestring: 'just some input'
-    fileInput: "/home/vsts/work/_temp/txt.txt"
+# - task: buildandreleasetask@0
+#   inputs:
+#     samplestring: 'just some input'
+#     fileInput: "/home/vsts/work/_temp/txt.txt"
