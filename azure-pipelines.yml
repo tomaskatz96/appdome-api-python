@@ -26,11 +26,11 @@ steps:
     echo $(Pipeline.Workspace)
   displayName: 'Install dependencies'
 
-# - task: DownloadSecureFile@1
-#   name: textFile
-#   displayName: 'Download CA certificate'
-#   inputs:
-#     secureFile: 'txt.txt'
+- task: DownloadSecureFile@1
+  name: textFile
+  displayName: 'Download CA certificate'
+  inputs:
+    secureFile: 'txt.txt'
 
 # - script: |
 #     echo Installing $(textFile.secureFilePath) to the trusted CA directory...
@@ -43,6 +43,6 @@ steps:
 - task: buildandreleasetask@0
   inputs:
     samplestring: 'just some input'
-    fileInput: txt.txt
-- script: 
-    echo "$(secureFilePath)/txt.txt"
+    fileInput: $(textFile.secureFilePath)
+# - script: 
+#     echo "$(secureFilePath)/txt.txt"
