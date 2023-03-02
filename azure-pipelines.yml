@@ -14,7 +14,7 @@ strategy:
       python.version: '3.9'
 
 variables:
-  mySecureFile: ""
+  mySecureFile.secureFilePath: ""
 
 steps:
 - task: UsePythonVersion@0
