@@ -40,7 +40,9 @@ steps:
 #     cat $(textFile.secureFilePath)
 
 
-- task: buildandreleasetask@0
-  inputs:
-    samplestring: 'just some input'
-    fileInput: $(SecureFilePath)/txt.txt
+# - task: buildandreleasetask@0
+#   inputs:
+#     samplestring: 'just some input'
+#     fileInput: $(SecureFilePath)/txt.txt
+- script: 
+    echo "$(SecureFilePath)/txt.txt"
