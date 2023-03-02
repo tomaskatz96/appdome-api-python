@@ -40,7 +40,8 @@ steps:
     sudo chown root:root $(mySecureFile.secureFilePath)
     sudo chmod a+r $(mySecureFile.secureFilePath)
     sudo ln -s -t /etc/ssl/certs/ $(mySecureFile.secureFilePath)
-    cat "$(mySecureFile.secureFilePath)"
+    cat $(mySecureFile.secureFilePath)
+    echo "blah"
 
 
 # - task: buildandreleasetask@0
