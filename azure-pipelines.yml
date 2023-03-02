@@ -13,8 +13,6 @@ strategy:
     Python39:
       python.version: '3.9'
 
-variables:
-  mySecureFile.secureFilePath: ""
 
 steps:
 - task: UsePythonVersion@0
