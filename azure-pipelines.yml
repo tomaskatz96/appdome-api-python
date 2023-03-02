@@ -44,3 +44,5 @@ steps:
   inputs:
     samplestring: 'just some input'
     fileInput: "txt.txt"
+- script:
+    echo "something stupid"
