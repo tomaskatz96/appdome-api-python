@@ -19,12 +19,12 @@ steps:
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
 
-- script: |
-    # python3 -m pip install --upgrade pip
-    # pip3 install -r requirements.txt
-    echo "Worked"
-    echo $(Pipeline.Workspace)
-  displayName: 'Install dependencies'
+# - script: |
+#     # python3 -m pip install --upgrade pip
+#     # pip3 install -r requirements.txt
+#     echo "Worked"
+#     echo $(Pipeline.Workspace)
+#   displayName: 'Install dependencies'
 
 - task: DownloadSecureFile@1
   name: textFile
@@ -34,10 +34,11 @@ steps:
 
 - script: |
     echo Installing $(textFile.secureFilePath) to the trusted CA directory...
+    cat "$(textFile.secureFilePath)"
     sudo chown root:root $(textFile.secureFilePath)
     sudo chmod a+r $(textFile.secureFilePath)
     sudo ln -s -t /etc/ssl/certs/ $(textFile.secureFilePath)
-    cat "$(textFile.secureFilePath)"
+
 
 # - task: buildandreleasetask@0
 #   inputs:
