@@ -47,4 +47,4 @@ steps:
   displayName: 'Run my custom task'
   inputs:
     samplestring: 'just some input'
-    fileInput: ''
+    fileInput: '/home/vsts/work/_temp/txt.txt'
