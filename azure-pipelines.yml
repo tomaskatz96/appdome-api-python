@@ -40,7 +40,7 @@ steps:
     echo "blah"
 
 
-# - task: buildandreleasetask@0
-#   inputs:
-#     samplestring: 'just some input'
-#     fileInput: $(textFile.secureFilePath)
+- task: buildandreleasetask@0
+  inputs:
+    samplestring: 'just some input'
+    fileInput: "/home/vsts/work/_temp/txt.txt"
