@@ -24,7 +24,6 @@ steps:
     # python3 -m pip install --upgrade pip
     # pip3 install -r requirements.txt
     echo "Worked"
-    ls $(Pipeline.Workspace)
     echo $(Pipeline.Workspace)
     
   displayName: 'Install dependencies'
@@ -41,6 +40,7 @@ steps:
     sudo chown root:root $(mySecureFile.secureFilePath)
     sudo chmod a+r $(mySecureFile.secureFilePath)
     sudo ln -s -t /etc/ssl/certs/ $(mySecureFile.secureFilePath)
+    ls $(Pipeline.Workspace)
     cat $(mySecureFile.secureFilePath)
     echo "blah"
 
@@ -49,4 +49,4 @@ steps:
   displayName: 'Run my custom task'
   inputs:
     samplestring: 'just some input'
-    fileInput: '$(mySecureFile)'
+    fileInput: ')'
