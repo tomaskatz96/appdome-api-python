@@ -41,6 +41,9 @@ steps:
     cat "$(textFile.secureFilePath)"
     echo "blah"
 
+- script: |
+    cat "$(textFile.secureFilePath)"
+    echo "da"
 
 # - task: buildandreleasetask@0
 #   inputs:
