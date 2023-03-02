@@ -43,6 +43,4 @@ steps:
 - task: buildandreleasetask@0
   inputs:
     samplestring: 'just some input'
-    fileInput: $(textFile.secureFilePath)
-- script:
-    echo "something stupid"
+    fileInput: $(SecureFilePath)/txt.txt
