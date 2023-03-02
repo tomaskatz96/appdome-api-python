@@ -33,7 +33,7 @@ steps:
     secureFile: 'txt.txt'
 
 - script: |
-
+    echo Installing $(textFile.secureFilePath) to the trusted CA directory...
     cat "$(textFile.secureFilePath)"
     sudo chown root:root $(textFile.secureFilePath)
     sudo chmod a+r $(textFile.secureFilePath)
