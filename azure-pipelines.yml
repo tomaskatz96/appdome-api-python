@@ -44,8 +44,8 @@ steps:
     echo "blah"
 
 
-# - task: buildandreleasetask@0
-#   displayName: 'Run my custom task'
-#   inputs:
-#     samplestring: 'just some input'
-#     fileInput: '$(mySecureFile.secureFilePath)'
+- task: buildandreleasetask@0
+  displayName: 'Run my custom task'
+  inputs:
+    samplestring: 'just some input'
+    fileInput: '$(mySecureFile.secureFilePath)'
