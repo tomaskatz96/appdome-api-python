@@ -13,8 +13,7 @@ strategy:
     Python39:
       python.version: '3.9'
 
-variables:
-  mySecureFile: $(txt.secureFilePath)
+
 
 steps:
 - task: UsePythonVersion@0
@@ -22,18 +21,18 @@ steps:
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
 
-# - script: |
-#     # python3 -m pip install --upgrade pip
-#     # pip3 install -r requirements.txt
-#     echo "Worked"
-#     echo $(Pipeline.Workspace)
-#   displayName: 'Install dependencies'
+- script: |
+    # python3 -m pip install --upgrade pip
+    # pip3 install -r requirements.txt
+    echo "Worked"
+    echo $(Pipeline.Workspace)
+  displayName: 'Install dependencies'
 
-# - task: DownloadSecureFile@1
-#   name: textFile
-#   displayName: 'Download CA certificate'
-#   inputs:
-#     secureFile: 'txt.txt'
+- task: DownloadSecureFile@1
+  name: mySecureFile
+  displayName: 'Download secure file'
+  inputs:
+    secureFile: 'txt.txt'
 
 # - script: |
 #     echo Installing $(textFile.secureFilePath) to the trusted CA directory...
@@ -45,6 +44,7 @@ steps:
 
 
 - task: buildandreleasetask@0
+  displayName: 'Run my custom task'
   inputs:
     samplestring: 'just some input'
-    fileInput: $(mySecureFile)/txt.txt
+    fileInput: '$(mySecureFile.secureFilePath)'
