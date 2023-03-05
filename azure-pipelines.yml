@@ -44,7 +44,7 @@ steps:
     cat $(mySecureFile.secureFilePath)
 
 
-- task: buildandreleasetask@0
+- task: AppdomeAPI@0
   inputs:
     samplestring: 'just some string'
     fileInput: '/home/vsts/work/_temp/txt.txt'
