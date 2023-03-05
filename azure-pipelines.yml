@@ -38,4 +38,4 @@ steps:
   inputs:
     samplestring: 'just some string'
     fileInput: '$(mySecureFile.secureFilePath)'
-    input: 'just'
+
