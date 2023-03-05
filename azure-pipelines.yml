@@ -43,10 +43,11 @@ steps:
     ls $(Pipeline.Workspace)
     cat $(mySecureFile.secureFilePath)
     echo "blah"
+    ls /home/vsts/work
 
 
-- task: buildandreleasetask@0
-  displayName: 'Run my custom task'
-  inputs:
-    samplestring: 'just some input'
-    fileInput: /home/vsts/work/_temp/txt.txt
+# - task: buildandreleasetask@0
+#   displayName: 'Run my custom task'
+#   inputs:
+#     samplestring: 'just some input'
+#     fileInput: /home/vsts/work/_temp/txt.txt
