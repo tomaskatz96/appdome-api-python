@@ -43,7 +43,10 @@ steps:
     ls $(Pipeline.Workspace)
     cat $(mySecureFile.secureFilePath)
     echo "blah"
+    ls /home/vsts/work/SourceRootMapping
     ls /home/vsts/work/_temp
+    ls /home/vsts/work/_tasks
+
 
 
 # - task: buildandreleasetask@0
