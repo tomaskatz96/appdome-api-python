@@ -42,15 +42,11 @@ steps:
     # sudo ln -s -t /etc/ssl/certs/ $(mySecureFile.secureFilePath)
     ls $(Pipeline.Workspace)
     cat $(mySecureFile.secureFilePath)
-    echo "blah"
-    ls /home/vsts/work/SourceRootMapping
-    ls /home/vsts/work/_temp
-    ls /home/vsts/work/_tasks
 
 
 
-# - task: buildandreleasetask@0
-#   displayName: 'Run my custom task'
-#   inputs:
-#     samplestring: 'just some input'
-#     fileInput: /home/vsts/work/_temp/txt.txt
+- task: buildandreleasetask@0
+  displayName: 'Run my custom task'
+  inputs:
+    samplestring: 'just some input'
+    fileInput: /home/vsts/work/_temp/txt.txt
