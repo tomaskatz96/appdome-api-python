@@ -32,6 +32,17 @@ steps:
   name: mySecureFile
   displayName: 'Download secure file'
   inputs:
+    secureFile: 'txt.txt'
+
+- task: DownloadSecureFile@1
+  name: mySecureFile1
+  displayName: 'Download secure file'
+  inputs:
     secureFile: 'txt1.txt'
-
-
+- task: AppdomeAPI1@0
+  inputs:
+    samplestring: 'diff input'
+    fileInput: '$(secureFileId_txt)'
+- task: AppdomeAPI@0
+  inputs:
+    samplestring: 'just input'
