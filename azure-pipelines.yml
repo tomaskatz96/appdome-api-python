@@ -44,9 +44,7 @@ steps:
     cat $(mySecureFile.secureFilePath)
 
 
-
 - task: buildandreleasetask@0
-  displayName: 'Run my custom task'
   inputs:
-    samplestring: 'just some input'
-    fileInput: /home/vsts/work/_temp/txt.txt
+    samplestring: 'just some string'
+    fileInput: '/home/vsts/work/_temp/txt.txt'
