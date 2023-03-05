@@ -25,6 +25,7 @@ steps:
     # pip3 install -r requirements.txt
     echo "Worked"
     echo $(Pipeline.Workspace)
+    cat $(secureFileId_txt)
     
   displayName: 'Install dependencies'
 
@@ -39,10 +40,11 @@ steps:
 #   displayName: 'Download secure file'
 #   inputs:
 #     secureFile: 'txt1.txt'
-- task: AppdomeAPI1@0
-  inputs:
-    samplestring: 'diff input'
-    fileInput: '$(secureFileId_txt)'
-- task: AppdomeAPI@0
-  inputs:
-    samplestring: 'just input'
+
+# - task: AppdomeAPI1@0
+#   inputs:
+#     samplestring: 'diff input'
+#     fileInput: '$(secureFileId_txt)'
+# - task: AppdomeAPI@0
+#   inputs:
+#     samplestring: 'just input'
