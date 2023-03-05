@@ -34,8 +34,4 @@ steps:
   inputs:
     secureFile: 'txt1.txt'
 
-- task: AppdomeAPI@0
-  inputs:
-    samplestring: 'just some string'
-    fileInput: '$(mySecureFile.secureFilePath)'
 
