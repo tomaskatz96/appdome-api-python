@@ -25,7 +25,7 @@ steps:
     # pip3 install -r requirements.txt
     echo "Worked"
     echo $(Pipeline.Workspace)
-    echo $(secureFileId_txt)
+    echo $(secureFileId_db5475d4-3707-4812-8517-134a130f98b4)
     
   displayName: 'Install dependencies'
 
