@@ -32,17 +32,7 @@ steps:
   name: mySecureFile
   displayName: 'Download secure file'
   inputs:
-    secureFile: 'txt.txt'
-
-- script: |
-    echo Installing $(mySecureFile.secureFilePath) to the trusted CA directory...
-    echo "$(mySecureFile.secureFilePath)"
-    # sudo chown root:root $(mySecureFile.secureFilePath)
-    # sudo chmod a+r $(mySecureFile.secureFilePath)
-    # sudo ln -s -t /etc/ssl/certs/ $(mySecureFile.secureFilePath)
-    ls $(Pipeline.Workspace)
-    cat $(mySecureFile.secureFilePath)
-
+    secureFile: 'txt1.txt'
 
 - task: AppdomeAPI@0
   inputs:
